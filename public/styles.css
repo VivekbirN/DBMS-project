@@ -33,6 +33,7 @@ nav {
     letter-spacing: -0.5px;
     background: linear-gradient(45deg, #A0C878, #DDEB9D);
     -webkit-background-clip: text;
+    background-clip: text;
     -webkit-text-fill-color: transparent;
 }
 
@@ -82,6 +83,28 @@ main {
     margin-bottom: 3rem;
     border: 1px solid #DDEB9D;
 }
+
+.menu-tabs .tab-btn {
+    background-color: #E3F0AF; /* gold background */
+    color: #fff;               /* black text */
+    border: none;
+    padding: 10px 20px;
+    margin: 5px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .menu-tabs .tab-btn:hover {
+    background-color: #A0C878; /* darker gold on hover */
+    color: #000;
+  }
+  
+  .menu-tabs .tab-btn.active {
+    background-color: #A0C878; /* active tab - orange */
+    color: #000;
+  }
+  
 
 .menu-grid {
     display: grid;
