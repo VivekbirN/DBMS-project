@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Restaurant Management System - Admin</title>
+    <link rel="stylesheet" href="admin-styles.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">RMS Admin</div>
+            <div class="nav-links">
+                <button onclick="showSection('orders')">Orders</button>
+                <button onclick="showSection('bookings')">Table Bookings</button>
+                <button onclick="showSection('feedback')">Feedback</button>
+                <button onclick="logout()">Logout</button>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <!-- Orders Section -->
+        <section id="orders" class="section">
+            <h2>Orders Management</h2>
+            <div class="filter-bar">
+                <select id="orderStatusFilter" onchange="filterOrders()">
+                    <option value="all">All Orders</option>
+                    <option value="pending">Pending</option>
+                    <option value="confirmed">Confirmed</option>
+                    <option value="completed">Completed</option>
+                    <option value="cancelled">Cancelled</option>
+                </select>
+            </div>
+            <div id="ordersList" class="list-container"></div>
+        </section>
+
+        <!-- Bookings Section -->
+        <section id="bookings" class="section" style="display: none;">
+            <h2>Table Bookings</h2>
+            <div class="filter-bar">
+                <select id="bookingStatusFilter" onchange="filterBookings()">
+                    <option value="all">All Bookings</option>
+                    <option value="pending">Pending</option>
+                    <option value="confirmed">Confirmed</option>
+                    <option value="completed">Completed</option>
+                    <option value="cancelled">Cancelled</option>
+                </select>
+                <input type="date" id="bookingDateFilter" onchange="filterBookings()">
+            </div>
+            <div id="bookingsList" class="list-container"></div>
+        </section>
+        
+        <!-- Feedback Section -->
+        <section id="feedback" class="section" style="display: none;">
+            <h2>Customer Feedback</h2>
+            <div class="filter-bar">
+                <select id="feedbackRatingFilter" onchange="filterFeedback()">
+                    <option value="all">All Ratings</option>
+                    <option value="5">5 Stars</option>
+                    <option value="4">4 Stars</option>
+                    <option value="3">3 Stars</option>
+                    <option value="2">2 Stars</option>
+                    <option value="1">1 Star</option>
+                </select>
+            </div>
+            <div id="feedbackList" class="list-container"></div>
+        </section>
+    </main>
+
+    <script src="admin-script.js"></script>
+</body>
+</html>

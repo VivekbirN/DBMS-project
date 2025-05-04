@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Taco Bell - Tacos, Pizza & Coffee</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo" style="display: flex; align-items: center; gap: 10px;">
+                <img src="images/ar-taco-bell-logo-adobe-4x3-8f3526ee48ad4fd6818a2d238db7d005.png" alt="Taco Bell Logo" style="height: 40px;">
+                <span>Taco Bell</span>
+            </div>
+              
+            <div class="mobile-menu-toggle" onclick="toggleMobileMenu()">
+                <i class="fas fa-bars"></i>
+            </div>
+            <div class="nav-links" id="navLinks">
+                <button onclick="showSection('home')"><i class="fas fa-home"></i> Home</button>
+                <button onclick="showSection('menu')"><i class="fas fa-utensils"></i> Order</button>
+                <button onclick="showSection('book-table')"><i class="fas fa-chair"></i> Book Table</button>
+                <button onclick="showSection('about')"><i class="fas fa-info-circle"></i> About</button>
+                <button onclick="showSection('contact')"><i class="fas fa-envelope"></i> Contact</button>
+                <button onclick="showSection('help')"><i class="fas fa-question-circle"></i> Help</button>
+                <button id="loginBtn" onclick="showSection('login')"><i class="fas fa-sign-in-alt"></i> Login</button>
+                <button id="registerBtn" onclick="showSection('register')"><i class="fas fa-user-plus"></i> Register</button>
+                <button id="logoutBtn" style="display: none;" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</button>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <!-- Home Section -->
+        <section id="home" class="section">
+            <div class="hero">
+                <h1 style="color:#A0C878">Welcome to Taco Bell</h1>
+                <p style="color: #347928;">Where Mexican Tacos, Italian Pizzas, and Specialty Coffee Meet</p>
+
+                <button onclick="showSection('menu')">Order Now</button>
+            </div>
+            
+            <div class="featured-menu">
+                <h2>Featured Menu</h2>
+                <div class="menu-tabs">
+                    <button class="tab-btn active" onclick="filterMenu('Chef\'s Specials')">Chef's Specials</button>
+                    <button class="tab-btn" onclick="filterMenu('Tacos')">Tacos</button>
+                    <button class="tab-btn" onclick="filterMenu('Pizzas')">Pizzas</button>
+                    <button class="tab-btn" onclick="filterMenu('Burgers')">Burgers</button>
+                    <button class="tab-btn" onclick="filterMenu('Coffee')">Coffee</button>
+                    <button class="tab-btn" onclick="filterMenu('Desserts')">Desserts</button>
+                </div>
+                <div id="featuredItems" class="menu-grid"></div>
+            </div>
+            
+            <div class="about-preview">
+                <h2>About Us</h2>
+                <div class="about-content">
+                    <div class="about-image">
+                        <img src="https://via.placeholder.com/400x300" alt="Restaurant Interior">
+                    </div>
+                    <div class="about-text">
+                        <p>Founded by three passionate 4th semester students - Vivekbir, Vikhyat, and Vishal - Taco Bell brings together the best of Mexican, Italian, and Coffee cultures in one unique dining experience.</p>
+                        <button onclick="showSection('about')">Learn More</button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="cta-section">
+                <h2>Ready to Experience Taco Bell?</h2>
+                <button onclick="showSection('menu')">Order Online</button>
+            </div>
+        </section>
+        
+        <!-- Menu/Order Section -->
+        <section id="menu" class="section" style="display: none;">
+            <h2>Order Online</h2>
+            <div class="menu-tabs">
+                <button class="tab-btn active" onclick="filterMenu('all')">All</button>
+                <button class="tab-btn" onclick="filterMenu('Chef\'s Specials')">Chef's Specials</button>
+                <button class="tab-btn" onclick="filterMenu('Tacos')">Tacos</button>
+                <button class="tab-btn" onclick="filterMenu('Pizzas')">Pizzas</button>
+                <button class="tab-btn" onclick="filterMenu('Burgers')">Burgers</button>
+                <button class="tab-btn" onclick="filterMenu('Coffee')">Coffee</button>
+                <button class="tab-btn" onclick="filterMenu('Desserts')">Desserts</button>
+            </div>
+            <div id="menuItems" class="menu-grid"></div>
+            <div id="cart" class="cart">
+                <h3>Your Cart</h3>
+                <div id="cartItems"></div>
+                <div id="cartTotal">Total: ₹0.00</div>
+                <button onclick="placeOrder()">Place Order</button>
+            </div>
+        </section>
+        
+        <!-- About Section -->
+        <section id="about" class="section" style="display: none;">
+            <h2>Our Story</h2>
+            <br>
+            <div class="story-section">
+                <p>Taco Bell was born from the culinary dreams of three 4th semester students who wanted to create a unique dining experience that combines their favorite cuisines.</p>
+                <p>Our restaurant brings together the vibrant flavors of Mexican tacos, the comforting tradition of Italian pizzas, and the rich aroma of specialty coffee - all under one roof.</p>
+                <p>We're proud to offer vegetarian-friendly options across our menu, ensuring everyone can enjoy our fusion creations.</p>
+            </div>
+            <br>
+            
+            <h2>Meet Our Founders</h2>
+            <div class="team-grid">
+                <div class="team-member">
+                    <img src="images/viv.png" alt="Vivekbir">
+                    <h3>Vivekbir</h3>
+                    <p>The pizza maestro with a passion for perfect crusts and innovative toppings.</p>
+                </div>
+                <div class="team-member">
+                    <img src="images/vik.png" alt="Vikhyat">
+                    <h3>Vikhyat</h3>
+                    <p>Our taco expert who brings authentic Mexican flavors with a modern twist.</p>
+                </div>
+                <div class="team-member">
+                    <img src="images/vis.png" alt="Vishal">
+                    <h3>Vishal</h3>
+                    <p>The coffee connoisseur who ensures every cup is brewed to perfection.</p>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Contact & Reviews Section -->
+        <section id="contact" class="section" style="display: none;">
+            <h2>Contact & Reviews</h2>
+            
+            <div class="contact-form">
+                <h3>Share Your Feedback</h3>
+                <form id="feedbackForm" onsubmit="submitFeedback(event)">
+                    <input type="text" id="feedbackName" placeholder="Your Name" required>
+                    <input type="email" id="feedbackEmail" placeholder="Your Email" required>
+                    <select id="feedbackRating" required>
+                        <option value="" disabled selected>Select Rating</option>
+                        <option value="5">★★★★★ Excellent</option>
+                        <option value="4">★★★★☆ Very Good</option>
+                        <option value="3">★★★☆☆ Good</option>
+                        <option value="2">★★☆☆☆ Fair</option>
+                        <option value="1">★☆☆☆☆ Poor</option>
+                    </select>
+                    <textarea id="feedbackMessage" placeholder="Your Message" required></textarea>
+                    <button type="submit">Submit Feedback</button>
+                </form>
+            </div>
+            
+            <div class="reviews-section">
+                <h3>Customer Reviews</h3>
+                <div id="reviewsList" class="reviews-grid">
+                    <!-- Reviews will be loaded dynamically -->
+                </div>
+            </div>
+        </section>
+        
+        <!-- Table Booking Section -->
+        <section id="book-table" class="section" style="display: none;">
+            <h2>Book a Table</h2>
+            <div class="booking-form-container">
+                <form id="tableBookingForm" onsubmit="bookTableOnline(event)">
+                    <div class="form-group">
+                        <label for="bookingName">Full Name</label>
+                        <input type="text" id="bookingName" placeholder="Your Full Name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="bookingEmail">Email</label>
+                        <input type="email" id="bookingEmail" placeholder="Your Email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="bookingPhone">Phone Number</label>
+                        <input type="tel" id="bookingPhone" placeholder="Your Phone Number" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="bookingDate">Date</label>
+                        <input type="date" id="bookingDate" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="bookingTime">Time</label>
+                        <input type="time" id="bookingTime" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="bookingGuests">Number of Guests</label>
+                        <input type="number" id="bookingGuests" min="1" max="20" value="2" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="bookingRequests">Special Requests (Optional)</label>
+                        <textarea id="bookingRequests" placeholder="Any special requests or preferences"></textarea>
+                    </div>
+                    <button type="submit" class="btn-primary">Book Table</button>
+                </form>
+            </div>
+        </section>
+        
+        <!-- Help Section -->
+        <section id="help" class="section" style="display: none;">
+            <h2>Help & Support</h2>
+            
+            <div class="faq-section">
+                <h3>Frequently Asked Questions</h3>
+                <div class="accordion">
+                    <div class="accordion-item">
+                        <div class="accordion-header" onclick="toggleAccordion(this)">
+                            <h4>What are your operating hours?</h4>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="accordion-content">
+                            <p>We're open daily from 11:00 AM to 10:00 PM.</p>
+                        </div>
+                    </div>
+                    <div class="accordion-item">
+                        <div class="accordion-header" onclick="toggleAccordion(this)">
+                            <h4>Do you offer home delivery?</h4>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="accordion-content">
+                            <p>Yes, we offer home delivery within a 5km radius. Delivery is free for orders above ₹500.</p>
+                        </div>
+                    </div>
+                    <div class="accordion-item">
+                        <div class="accordion-header" onclick="toggleAccordion(this)">
+                            <h4>Are there vegetarian options available?</h4>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="accordion-content">
+                            <p>Absolutely! We have a wide range of vegetarian options across all our menu categories.</p>
+                        </div>
+                    </div>
+                    <div class="accordion-item">
+                        <div class="accordion-header" onclick="toggleAccordion(this)">
+                            <h4>How can I cancel my order?</h4>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="accordion-content">
+                            <p>You can cancel your order within 5 minutes of placing it by calling our customer service number.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="chat-support">
+                <h3>Chat Support</h3>
+                <div class="chat-container">
+                    <div class="chat-messages" id="chatMessages">
+                        <div class="message system">Welcome to Taco Bell support! How can we help you today?</div>
+                    </div>
+                    <div class="chat-input">
+                        <input type="text" id="chatInput" placeholder="Type your message here...">
+                        <button onclick="sendChatMessage()">Send</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Table Booking Section -->
+        <section id="booking" class="section" style="display: none;">
+            <h2>Book a Table</h2>
+            <form id="bookingForm" onsubmit="bookTable(event)">
+                <input type="text" id="bookingName" placeholder="Full Name" required>
+                <input type="email" id="bookingEmail" placeholder="Email" required>
+                <input type="tel" id="bookingPhone" placeholder="Phone Number" required>
+                <input type="date" id="bookingDate" required>
+                <input type="time" id="bookingTime" required>
+                <input type="number" id="guests" placeholder="Number of guests" required min="1" max="10">
+                <textarea id="bookingSpecialRequests" placeholder="Special Requests (Optional)"></textarea>
+                <button type="submit">Book Now</button>
+            </form>
+        </section>
+
+        <!-- Login Section -->
+        <section id="login" class="section" style="display: none;">
+            <h2>Login</h2>
+            <form id="loginForm" onsubmit="login(event)">
+                <input type="text" id="loginUsername" placeholder="Username" required>
+                <input type="password" id="loginPassword" placeholder="Password" required>
+                <button type="submit">Login</button>
+            </form>
+        </section>
+
+        <!-- Register Section -->
+        <section id="register" class="section" style="display: none;">
+            <h2>Register</h2>
+            <form id="registerForm" onsubmit="register(event)">
+                <input type="text" id="registerUsername" placeholder="Username" required>
+                <input type="email" id="registerEmail" placeholder="Email" required>
+                <input type="password" id="registerPassword" placeholder="Password" required>
+                <button type="submit">Register</button>
+            </form>
+        </section>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>
