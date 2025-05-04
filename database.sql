@@ -64,7 +64,7 @@ INSERT INTO menu_items (name, description, price, category, image_url) VALUES
 ('Masala Chai Affogato', 'Italian dessert with Indian masala chai twist', 349, 'Chef\'s Specials', 'chai_affogato.jpg'),
 
 -- Tacos
-('Classic Bean Taco', 'Traditional taco with seasoned beans and fresh toppings', 299, 'Tacos', 'bean_taco.jpg'),
+('Classic Bean Taco', 'Traditional taco with seasoned beans and fresh toppings', 299, 'Tacos', '/public/images/beantaco.png'),
 ('Spicy Chicken Taco', 'Fiery chicken taco with special hot sauce', 349, 'Tacos', 'chicken_taco.jpg'),
 ('Fish Taco', 'Crispy fish taco with tangy slaw and lime', 399, 'Tacos', 'fish_taco.jpg'),
 ('Veggie Taco', 'Fresh vegetable taco with guacamole', 249, 'Tacos', 'veggie_taco.jpg'),

@@ -86,7 +86,7 @@ main {
 
 .menu-tabs .tab-btn {
     background-color: #E3F0AF; /* gold background */
-    color: #fff;               /* black text */
+    color: #000;               /* black text */
     border: none;
     padding: 10px 20px;
     margin: 5px;
@@ -97,12 +97,12 @@ main {
   
   .menu-tabs .tab-btn:hover {
     background-color: #A0C878; /* darker gold on hover */
-    color: #000;
+    color: #fff;
   }
   
   .menu-tabs .tab-btn.active {
     background-color: #A0C878; /* active tab - orange */
-    color: #000;
+    color: #fff;
   }
   
 
@@ -439,7 +439,7 @@ main {
 }
 
 .chat-container {
-    background-color: #252525;
+    background-color: #FFFDF6; /* Lightest background */
     border-radius: 8px;
     overflow: hidden;
     height: 400px;
@@ -451,6 +451,7 @@ main {
     flex: 1;
     padding: 1rem;
     overflow-y: auto;
+    background-color: #FAF6E9; /* Soft background for message area */
 }
 
 .message {
@@ -458,15 +459,16 @@ main {
     padding: 0.8rem;
     border-radius: 8px;
     max-width: 80%;
+    color: #333; /* Keep readable text */
 }
 
 .message.system {
-    background-color: #333;
+    background-color: #DDEB9D; /* Soft greenish-yellow */
     align-self: flex-start;
 }
 
 .message.user {
-    background-color: #ff6b6b;
+    background-color: #A0C878; /* Green for user messages */
     align-self: flex-end;
     margin-left: auto;
 }
@@ -474,20 +476,20 @@ main {
 .chat-input {
     display: flex;
     padding: 0.5rem;
-    background-color: #1e1e1e;
+    background-color: #FAF6E9; /* Match the message area */
 }
 
 .chat-input input {
     flex: 1;
     padding: 0.8rem;
-    border: 1px solid #333;
+    border: 1px solid #DDEB9D;
     border-radius: 4px;
-    background-color: #252525;
-    color: #e0e0e0;
+    background-color: #FFFDF6;
+    color: #333;
 }
 
 .chat-input button {
-    background-color: #ff6b6b;
+    background-color: #A0C878; /* Match user message color */
     color: white;
     border: none;
     padding: 0.8rem 1.5rem;
@@ -495,6 +497,7 @@ main {
     border-radius: 4px;
     cursor: pointer;
 }
+
 
 /* Toast Notifications */
 #toast {
