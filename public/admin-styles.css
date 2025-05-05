@@ -6,13 +6,13 @@
 }
 
 body {
-    background-color: #f5f5f5;
+    background-color: #121212;
 }
 
 header {
-    background-color: #2c3e50;
+    background-color: #1a1a1a;
     padding: 1rem;
-    color: white;
+    color: #ff6b6b;
 }
 
 nav {
@@ -31,7 +31,7 @@ nav {
 .nav-links button {
     background: none;
     border: none;
-    color: white;
+    color: #e0e0e0;
     padding: 0.5rem 1rem;
     cursor: pointer;
     font-size: 1rem;
@@ -39,7 +39,7 @@ nav {
 }
 
 .nav-links button:hover {
-    color: #3498db;
+    color: #ff6b6b;
 }
 
 main {
@@ -49,10 +49,11 @@ main {
 }
 
 .section {
-    background-color: white;
+    background-color: #1e1e1e;
     padding: 2rem;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    color: #e0e0e0;
 }
 
 .filter-bar {
@@ -64,9 +65,11 @@ main {
 
 select, input[type="date"] {
     padding: 0.5rem;
-    border: 1px solid #ddd;
+    border: 1px solid #333;
     border-radius: 4px;
     font-size: 1rem;
+    background-color: #252525;
+    color: #e0e0e0;
 }
 
 .list-container {
@@ -75,13 +78,15 @@ select, input[type="date"] {
 }
 
 .list-item {
-    border: 1px solid #ddd;
+    border: 1px solid #333;
     border-radius: 8px;
     padding: 1rem;
     display: grid;
     grid-template-columns: 1fr auto;
     gap: 1rem;
     align-items: center;
+    background-color: #1e1e1e;
+    color: #e0e0e0;
 }
 
 .list-item-details {
@@ -100,25 +105,27 @@ select, input[type="date"] {
     border-radius: 4px;
     font-size: 0.875rem;
     font-weight: bold;
+    text-align: center;
+    color: #e0e0e0;
 }
 
 .status-pending {
-    background-color: #ffd700;
-    color: #000;
+    background-color: #ff8c8c;
+    color: #121212;
 }
 
 .status-confirmed {
-    background-color: #3498db;
-    color: white;
+    background-color: #333;
+    color: #e0e0e0;
 }
 
 .status-completed {
-    background-color: #2ecc71;
-    color: white;
+    background-color: #1a1a1a;
+    color: #e0e0e0;
 }
 
 .status-cancelled {
-    background-color: #e74c3c;
+    background-color: #ff6b6b;
     color: white;
 }
 
@@ -132,22 +139,28 @@ button {
 }
 
 button.confirm {
-    background-color: #3498db;
+    background-color: #ff6b6b;
     color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
 }
 
 button.complete {
-    background-color: #2ecc71;
-    color: white;
+    background-color: #333;
+    color: #e0e0e0;
 }
 
 button.cancel {
-    background-color: #e74c3c;
+    background-color: #ff6b6b;
     color: white;
 }
 
 button:hover {
-    opacity: 0.9;
+    background-color: #ff8c8c;
+    color: #121212;
 }
 
 @media (max-width: 768px) {

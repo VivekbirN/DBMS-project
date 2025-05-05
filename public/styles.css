@@ -6,17 +6,15 @@
 }
 
 body {
-    background-color: #FFFDF6;
-    color: #333333;
-    line-height: 1.6;
-    letter-spacing: 0.015em;
+    background-color: #F8F4E1;
+    color: #4E1F00;
 }
 
 header {
-    background-color: #FAF6E9;
+    background-color: #74512D;
     padding: 1.25rem;
-    color: #333333;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    color: #F8F4E1;
+    box-shadow: 0 4px 20px rgba(78, 31, 0, 0.1);
 }
 
 nav {
@@ -31,16 +29,13 @@ nav {
     font-size: 1.75rem;
     font-weight: 700;
     letter-spacing: -0.5px;
-    background: linear-gradient(45deg, #A0C878, #DDEB9D);
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
+    color: #FEBA17;
 }
 
 .nav-links button {
     background: none;
     border: none;
-    color: #333333;
+    color: #F8F4E1;
     padding: 0.75rem 1.25rem;
     cursor: pointer;
     font-size: 1.1rem;
@@ -50,7 +45,7 @@ nav {
 }
 
 .nav-links button:hover {
-    color: #A0C878;
+    color: #FEBA17;
 }
 
 .nav-links button::after {
@@ -60,7 +55,7 @@ nav {
     height: 2px;
     bottom: 0;
     left: 50%;
-    background-color: #3d7eff;
+    background-color: #FEBA17;
     transition: all 0.3s ease;
     transform: translateX(-50%);
 }
@@ -76,17 +71,18 @@ main {
 }
 
 .section {
-    background-color: #FAF6E9;
+    background-color: #F8F4E1;
     padding: 2.5rem;
     border-radius: 16px;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 8px 32px rgba(78, 31, 0, 0.1);
     margin-bottom: 3rem;
-    border: 1px solid #DDEB9D;
+    border: 1px solid #74512D;
+    color: #4E1F00;
 }
 
 .menu-tabs .tab-btn {
-    background-color: #E3F0AF; /* gold background */
-    color: #000;               /* black text */
+    background-color: #74512D;
+    color: #F8F4E1;
     border: none;
     padding: 10px 20px;
     margin: 5px;
@@ -96,13 +92,13 @@ main {
   }
   
   .menu-tabs .tab-btn:hover {
-    background-color: #A0C878; /* darker gold on hover */
-    color: #fff;
+    background-color: #4E1F00;
+    color: #FEBA17;
   }
   
   .menu-tabs .tab-btn.active {
-    background-color: #A0C878; /* active tab - orange */
-    color: #fff;
+    background-color: #FEBA17;
+    color: #4E1F00;
   }
   
 
@@ -114,12 +110,13 @@ main {
 }
 
 .menu-item {
-    border: 1px solid #DDEB9D;
+    border: 1px solid #74512D;
     border-radius: 12px;
     padding: 1.25rem;
     text-align: center;
-    background-color: #FFFDF6;
+    background-color: #74512D;
     transition: transform 0.3s, box-shadow 0.3s;
+    color: #F8F4E1;
 }
 
 .menu-item:hover {
@@ -140,13 +137,13 @@ main {
 }
 
 .menu-item p {
-    color: #b0b0b0;
+    color: #F8F4E1;
     margin-bottom: 1rem;
 }
 
 .menu-item button {
-    background-color: #A0C878;
-    color: white;
+    background-color: #FEBA17;
+    color: #4E1F00;
     border: none;
     padding: 0.75rem 1.5rem;
     border-radius: 8px;
@@ -159,24 +156,25 @@ main {
 }
 
 .menu-item button:hover {
-    background-color: #DDEB9D;
-    color: #333333;
+    background-color: #F8F4E1;
+    color: #4E1F00;
     transform: scale(1.05);
-    box-shadow: 0 0 20px rgba(160, 200, 120, 0.4);
+    box-shadow: 0 0 20px rgba(254, 186, 23, 0.4);
 }
 
 .cart {
-    background-color: #FAF6E9;
+    background-color: #74512D;
     border-radius: 12px;
     padding: 1.5rem;
     margin-top: 2rem;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-    border: 1px solid #DDEB9D;
+    box-shadow: 0 8px 32px rgba(78, 31, 0, 0.1);
+    border: 1px solid #4E1F00;
+    color: #F8F4E1;
 }
 
 .cart h3 {
     margin-bottom: 1rem;
-    color: #ff6b6b;
+    color: #FEBA17;
 }
 
 .cart-item {
@@ -184,7 +182,7 @@ main {
     justify-content: space-between;
     align-items: center;
     padding: 0.5rem 0;
-    border-bottom: 1px solid #333;
+    border-bottom: 1px solid #4E1F00;
 }
 
 .cart-item-info {
@@ -196,7 +194,7 @@ main {
 .remove-item {
     background: none;
     border: none;
-    color: #ff6b6b;
+    color: #FEBA17;
     cursor: pointer;
 }
 
@@ -215,7 +213,7 @@ main {
 .hero {
     text-align: center;
     padding: 4rem 1rem;
-    background: linear-gradient(rgba(160, 200, 120, 0.2), rgba(221, 235, 157, 0.2)), url('https://via.placeholder.com/1200x600') center/cover no-repeat;
+    background: linear-gradient(rgba(#F4F6FF), rgba(#F4F6FF)), url('https://via.placeholder.com/1200x600') center/cover no-repeat;
     border-radius: 8px;
     margin-bottom: 2rem;
 }
@@ -233,7 +231,7 @@ main {
 }
 
 .hero button {
-    background-color: #A0C878;
+    background-color: #4E1F00;
     color: white;
     border: none;
     padding: 0.8rem 2rem;
@@ -244,8 +242,8 @@ main {
 }
 
 .hero button:hover {
-    background-color: #DDEB9D;
-    color: #333333;
+    background-color: #FEBA17;
+    color: #121212;
     transform: scale(1.05);
 }
 
@@ -313,11 +311,11 @@ main {
 }
 
 .team-member {
-    background-color:#C0EBA6; /* Light warm yellow – change as needed */
+    background-color: #4E1F00;
     padding: 20px;
     border-radius: 12px;
     text-align: center;
-    color: #333;
+    color: #e0e0e0;
     transition: background-color 0.3s ease;
   }
   
@@ -336,11 +334,12 @@ main {
 
 /* Contact & Reviews */
 .contact-form {
-    background-color: #FAF6E9;
+    background-color: #74512D;
     padding: 2rem;
     border-radius: 8px;
     margin-bottom: 2rem;
-    border: 1px solid #DDEB9D;
+    border: 1px solid #4E1F00;
+    color: #F8F4E1;
 }
 
 .contact-form h3 {
@@ -353,15 +352,15 @@ main {
     width: 100%;
     padding: 0.8rem;
     margin-bottom: 1rem;
-    border: 1px solid #DDEB9D;
+    border: 1px solid #4E1F00;
     border-radius: 4px;
-    background-color: #FFFDF6;
-    color: #333333;
+    background-color: #F8F4E1;
+    color: #4E1F00;
 }
 
 .contact-form button {
-    background-color: #A0C878;
-    color: white;
+    background-color: #FEBA17;
+    color: #4E1F00;
     border: none;
     padding: 0.8rem 1.5rem;
     border-radius: 4px;
@@ -370,8 +369,8 @@ main {
 }
 
 .contact-form button:hover {
-    background-color: #DDEB9D;
-    color: #333333;
+    background-color: #F8F4E1;
+    color: #74512D;
 }
 
 .reviews-grid {
@@ -381,10 +380,11 @@ main {
 }
 
 .review-card {
-    background-color: #FAF6E9;
+    background-color: #1e1e1e;
     border-radius: 8px;
     padding: 1.5rem;
-    border: 1px solid #DDEB9D;
+    border: 1px solid #333;
+    color: #e0e0e0;
 }
 
 .review-header {
@@ -408,26 +408,20 @@ main {
 
 .accordion-item {
     margin-bottom: 1rem;
-    border: 1px solid #DDEB9D;
+    border: 1px solid #333;
     border-radius: 8px;
     overflow: hidden;
 }
 
 .accordion-header {
-    background-color: #FAF6E9;
-    padding: 1rem;
-    cursor: pointer;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    color: #333333;
+    background-color: #222222;
+    color: #FFFFFF;
+    border-bottom: 1px solid #555555;
 }
 
 .accordion-content {
-    max-height: 0;
-    overflow: hidden;
-    transition: max-height 0.3s ease;
-    background-color: #1e1e1e;
+    background-color: #000000;
+    color: #FFFFFF;
 }
 
 .accordion-content p {
@@ -439,7 +433,7 @@ main {
 }
 
 .chat-container {
-    background-color: #FFFDF6; /* Lightest background */
+    background-color: #1a1a1a;
     border-radius: 8px;
     overflow: hidden;
     height: 400px;
@@ -451,7 +445,7 @@ main {
     flex: 1;
     padding: 1rem;
     overflow-y: auto;
-    background-color: #FAF6E9; /* Soft background for message area */
+    background-color: #121212;
 }
 
 .message {
@@ -463,33 +457,35 @@ main {
 }
 
 .message.system {
-    background-color: #DDEB9D; /* Soft greenish-yellow */
+    background-color: #333;
     align-self: flex-start;
+    color: #e0e0e0;
 }
 
 .message.user {
-    background-color: #A0C878; /* Green for user messages */
+    background-color: #ff6b6b;
     align-self: flex-end;
     margin-left: auto;
+    color: white;
 }
 
 .chat-input {
     display: flex;
     padding: 0.5rem;
-    background-color: #FAF6E9; /* Match the message area */
+    background-color: #1a1a1a;
 }
 
 .chat-input input {
     flex: 1;
     padding: 0.8rem;
-    border: 1px solid #DDEB9D;
+    border: 1px solid #333;
     border-radius: 4px;
-    background-color: #FFFDF6;
-    color: #333;
+    background-color: #252525;
+    color: #e0e0e0;
 }
 
 .chat-input button {
-    background-color: #A0C878; /* Match user message color */
+    background-color: #ff6b6b;
     color: white;
     border: none;
     padding: 0.8rem 1.5rem;
@@ -503,8 +499,8 @@ main {
 #toast {
     visibility: hidden;
     min-width: 250px;
-    background-color: #A0C878;
-    color: #FFFDF6;
+    background-color: #ff6b6b;
+    color: white;
     text-align: center;
     border-radius: 4px;
     padding: 16px;
@@ -539,7 +535,7 @@ main {
         top: 60px;
         left: 0;
         right: 0;
-        background-color: #FAF6E9;
+        background-color: #1a1a1a;
         flex-direction: column;
         padding: 1rem;
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -554,7 +550,7 @@ main {
         width: 100%;
         text-align: left;
         padding: 0.8rem;
-        border-bottom: 1px solid #DDEB9D;
+        border-bottom: 1px solid #333;
     }
     
     .mobile-menu-toggle {
@@ -621,13 +617,15 @@ form {
 
 input {
     padding: 0.5rem;
-    border: 1px solid #ddd;
+    border: 1px solid #74512D;
     border-radius: 4px;
+    background-color: #F8F4E1;
+    color: #4E1F00;
 }
 
 button {
-    background-color: #A0C878;
-    color: white;
+    background-color: #FEBA17;
+    color: #4E1F00;
     border: none;
     padding: 0.5rem 1rem;
     border-radius: 4px;
@@ -636,8 +634,8 @@ button {
 }
 
 button:hover {
-    background-color: #DDEB9D;
-    color: #333333;
+    background-color: #F8F4E1;
+    color: #4E1F00;
 }
 
 @media (max-width: 768px) {

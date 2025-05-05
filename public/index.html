@@ -35,12 +35,12 @@
     <main>
         <!-- Home Section -->
         <section id="home" class="section">
-            <div class="hero">
-                <h1 style="color:#A0C878">Welcome to Taco Bell</h1>
-                <p style="color: #347928;">Where Mexican Tacos, Italian Pizzas, and Specialty Coffee Meet</p>
-
+            <div class="hero" style="background-color: #fff;">
+                <h1 style="color: #000; text-shadow: 2px 2px 4px #000;">Welcome to Taco Bell</h1>
+                <p style="color: #000;">Where Mexican Tacos, Italian Pizzas, and Specialty Coffee Meet</p>
                 <button onclick="showSection('menu')">Order Now</button>
             </div>
+            
             
             <div class="featured-menu">
                 <h2>Featured Menu</h2>
@@ -90,10 +90,10 @@
             <div id="cart" class="cart">
                 <h3>Your Cart</h3>
                 <div id="cartItems"></div>
-                <div id="cartTotal">Total: ₹0.00</div>
+                <div id="cartTotal" style="color:rgba(255, 107, 107, 0.76)">Total: ₹0.00</div>
                 <button onclick="placeOrder()">Place Order</button>
             </div>
-        </section>
+        </section>  
         
         <!-- About Section -->
         <section id="about" class="section" style="display: none;">

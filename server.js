@@ -116,7 +116,7 @@ app.get('/api/menu', (req, res) => {
 
 // Order Routes
 app.post('/api/orders', async (req, res) => {
-  const { items, totalAmount } = req.body;
+  const { items, totalAmount, delivery_address, contact_phone } = req.body;
   
   try {
     // Extract user ID from JWT token if available
@@ -139,11 +139,11 @@ app.post('/api/orders', async (req, res) => {
     }));
 
     const [result] = await promisePool.query(
-      'INSERT INTO orders (user_id, items, total_amount, status) VALUES (?, ?, ?, ?)', 
-      [userId, JSON.stringify(simplifiedItems), totalAmount, 'pending']
+      'INSERT INTO orders (user_id, items, total_amount, status, delivery_address, contact_phone) VALUES (?, ?, ?, ?, ?, ?)', 
+      [userId, JSON.stringify(simplifiedItems), totalAmount, 'pending', delivery_address, contact_phone]
     );
     
-    res.status(201).json({ message: 'Order placed successfully' });
+    res.status(201).json({ message: 'Order placed successfully' });}
   } catch (error) {
     console.error('Error placing order:', error);
     res.status(500).json({ error: 'Error placing order' });
@@ -283,7 +283,7 @@ app.get('/api/admin/feedback', (req, res) => {
 });
 
 // Start server
-const PORT = process.env.PORT || 3002; // Changed port to avoid conflict
+const PORT = process.env.PORT || 3003; // Changed port to avoid conflict
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
