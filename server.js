@@ -76,6 +76,41 @@ app.post('/api/user/register', async (req, res) => {
   }
 });
 
+// Admin Registration Route
+app.post('/api/admin/register', async (req, res) => {
+  try {
+    const { username, password, email, phone } = req.body;
+    
+    // Validate input
+    if (!username || !password || !email || !phone) {
+      return res.status(400).json({ error: 'Username, password, email, and phone are required' });
+    }
+    
+    // Check if username or email already exists in admin table
+    const [existingAdmins] = await promisePool.query('SELECT * FROM admin WHERE username = ? OR email = ?', [username, email]);
+    
+    if (existingAdmins.length > 0) {
+      const existingAdmin = existingAdmins[0];
+      if (existingAdmin.username === username) {
+        return res.status(409).json({ error: 'Admin username already exists' });
+      }
+      if (existingAdmin.email === email) {
+        return res.status(409).json({ error: 'Admin email already exists' });
+      }
+    }
+    
+    const hashedPassword = await bcrypt.hash(password, 10);
+    
+    const [result] = await promisePool.query('INSERT INTO admin (username, password, email, phone) VALUES (?, ?, ?, ?)', 
+      [username, hashedPassword, email, phone]);
+    
+    res.status(201).json({ message: 'Admin registered successfully' });
+  } catch (error) {
+    console.error('Admin registration error:', error);
+    res.status(500).json({ error: 'Server error during admin registration' });
+  }
+});
+
 app.post('/api/user/login', async (req, res) => {
   const { username, password } = req.body;
   
@@ -100,6 +135,34 @@ app.post('/api/user/login', async (req, res) => {
   } catch (error) {
     console.error('Login error:', error);
     res.status(500).json({ error: 'Server error during login' });
+  }
+});
+
+// Admin Login Route
+app.post('/api/admin/login', async (req, res) => {
+  const { username, password } = req.body;
+  
+  try {
+    const [results] = await promisePool.query('SELECT * FROM admin WHERE username = ?', [username]);
+    
+    if (results.length === 0) {
+      res.status(401).json({ error: 'Invalid admin credentials' });
+      return;
+    }
+    
+    const admin = results[0];
+    const validPassword = await bcrypt.compare(password, admin.password);
+    
+    if (!validPassword) {
+      res.status(401).json({ error: 'Invalid admin credentials' });
+      return;
+    }
+    
+    const token = jwt.sign({ adminId: admin.id, role: 'admin' }, process.env.JWT_SECRET);
+    res.json({ token });
+  } catch (error) {
+    console.error('Admin login error:', error);
+    res.status(500).json({ error: 'Server error during admin login' });
   }
 });
 
@@ -132,18 +195,59 @@ app.post('/api/orders', async (req, res) => {
       }
     }
 
+    // Check inventory for each item before placing order
+    const outOfStockItems = [];
+    for (const item of items) {
+      // Get the menu item ID
+      const [menuItems] = await promisePool.query('SELECT id FROM menu_items WHERE name = ?', [item.name]);
+      
+      if (menuItems.length === 0) {
+        return res.status(404).json({ error: `Item not found: ${item.name}` });
+      }
+      
+      const menuItemId = menuItems[0].id;
+      
+      // Check if there's enough quantity in stock
+      const [quantityResult] = await promisePool.query(
+        'SELECT quantity FROM menu_quantity WHERE menu_item_id = ?', 
+        [menuItemId]
+      );
+      
+      if (quantityResult.length === 0 || quantityResult[0].quantity < item.quantity) {
+        outOfStockItems.push(item.name);
+      }
+    }
+    
+    if (outOfStockItems.length > 0) {
+      return res.status(400).json({
+        error: 'Some items are out of stock',
+        outOfStockItems: outOfStockItems
+      });
+    }
+
     // Simplify items to only include name and quantity
     const simplifiedItems = items.map(item => ({
       name: item.name,
       quantity: item.quantity
     }));
 
+    // Update inventory quantities
+    for (const item of items) {
+      const [menuItems] = await promisePool.query('SELECT id FROM menu_items WHERE name = ?', [item.name]);
+      const menuItemId = menuItems[0].id;
+      
+      await promisePool.query(
+        'UPDATE menu_quantity SET quantity = quantity - ? WHERE menu_item_id = ?',
+        [item.quantity, menuItemId]
+      );
+    }
+
     const [result] = await promisePool.query(
       'INSERT INTO orders (user_id, items, total_amount, status, delivery_address, contact_phone) VALUES (?, ?, ?, ?, ?, ?)', 
       [userId, JSON.stringify(simplifiedItems), totalAmount, 'pending', delivery_address, contact_phone]
     );
     
-    res.status(201).json({ message: 'Order placed successfully' });}
+    res.status(201).json({ message: 'Order placed successfully' });
   } catch (error) {
     console.error('Error placing order:', error);
     res.status(500).json({ error: 'Error placing order' });
@@ -209,10 +313,40 @@ app.get('/api/feedback', (req, res) => {
   });
 });
 
-// Admin Routes
-app.get('/api/admin/orders', (req, res) => {
-  db.query('SELECT * FROM orders', (err, results) => {
+// Admin Authentication Middleware
+const authenticateAdmin = (req, res, next) => {
+  const authHeader = req.headers.authorization;
+  
+  if (!authHeader || !authHeader.startsWith('Bearer ')) {
+    return res.status(401).json({ error: 'Access denied. No token provided.' });
+  }
+  
+  const token = authHeader.split(' ')[1];
+  
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    if (decoded.role !== 'admin') {
+      return res.status(403).json({ error: 'Access denied. Admin privileges required.' });
+    }
+    req.admin = decoded;
+    next();
+  } catch (error) {
+    return res.status(401).json({ error: 'Invalid token.' });
+  }
+};
+
+// Admin Routes - Protected with middleware
+app.get('/api/admin/orders', authenticateAdmin, (req, res) => {
+  const query = `
+    SELECT o.*, u.username as user_name 
+    FROM orders o
+    LEFT JOIN users u ON o.user_id = u.id
+    ORDER BY o.created_at DESC
+  `;
+  
+  db.query(query, (err, results) => {
     if (err) {
+      console.error('Error fetching orders:', err);
       res.status(500).json({ error: 'Error fetching orders' });
       return;
     }
@@ -220,7 +354,50 @@ app.get('/api/admin/orders', (req, res) => {
   });
 });
 
-app.get('/api/admin/bookings', (req, res) => {
+// Admin Inventory Management Routes
+app.get('/api/admin/inventory', authenticateAdmin, (req, res) => {
+  db.query(
+    'SELECT mq.*, mi.image_url FROM menu_quantity mq JOIN menu_items mi ON mq.menu_item_id = mi.id ORDER BY mq.category, mq.name',
+    (err, results) => {
+      if (err) {
+        console.error('Error fetching inventory:', err);
+        res.status(500).json({ error: 'Error fetching inventory' });
+        return;
+      }
+      res.json(results);
+    }
+  );
+});
+
+app.post('/api/admin/inventory/restock', authenticateAdmin, async (req, res) => {
+  try {
+    // Restock all items to default quantity of 20
+    await promisePool.query('UPDATE menu_quantity SET quantity = 20');
+    res.json({ message: 'All items restocked successfully' });
+  } catch (error) {
+    console.error('Error restocking inventory:', error);
+    res.status(500).json({ error: 'Error restocking inventory' });
+  }
+});
+
+app.patch('/api/admin/inventory/:id', authenticateAdmin, async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { quantity } = req.body;
+    
+    if (quantity < 0) {
+      return res.status(400).json({ error: 'Quantity cannot be negative' });
+    }
+    
+    await promisePool.query('UPDATE menu_quantity SET quantity = ? WHERE id = ?', [quantity, id]);
+    res.json({ message: 'Inventory updated successfully' });
+  } catch (error) {
+    console.error('Error updating inventory:', error);
+    res.status(500).json({ error: 'Error updating inventory' });
+  }
+});
+
+app.get('/api/admin/bookings', authenticateAdmin, (req, res) => {
   db.query('SELECT * FROM bookings ORDER BY date ASC', (err, results) => {
     if (err) {
       console.error('Error fetching bookings:', err);
@@ -231,7 +408,7 @@ app.get('/api/admin/bookings', (req, res) => {
   });
 });
 
-app.patch('/api/admin/bookings/:id', (req, res) => {
+app.patch('/api/admin/bookings/:id', authenticateAdmin, (req, res) => {
   const { id } = req.params;
   const { status } = req.body;
   
@@ -247,35 +424,26 @@ app.patch('/api/admin/bookings/:id', (req, res) => {
     });
 });
 
-app.get('/api/admin/table-bookings', (req, res) => {
-  db.query('SELECT * FROM table_bookings ORDER BY date ASC', (err, results) => {
-    if (err) {
-      res.status(500).json({ error: 'Error fetching table bookings' });
-      return;
-    }
-    res.json(results);
-  });
-});
-
-app.patch('/api/admin/table-bookings/:id', (req, res) => {
+app.patch('/api/admin/orders/:id', authenticateAdmin, (req, res) => {
   const { id } = req.params;
   const { status } = req.body;
   
-  db.query('UPDATE table_bookings SET status = ? WHERE id = ?', 
+  db.query('UPDATE orders SET status = ? WHERE id = ?', 
     [status, id], 
     (err, result) => {
       if (err) {
-        res.status(500).json({ error: 'Error updating table booking status' });
+        console.error('Error updating order status:', err);
+        res.status(500).json({ error: 'Error updating order status' });
         return;
       }
-      res.json({ message: 'Table booking status updated successfully' });
+      res.json({ message: 'Order status updated successfully' });
     });
 });
 
-app.get('/api/admin/feedback', (req, res) => {
-  db.query('SELECT * FROM user_feedback ORDER BY created_at DESC', (err, results) => {
+app.get('/api/admin/feedback', authenticateAdmin, (req, res) => {
+  db.query('SELECT * FROM CustomerReviews ORDER BY SubmittedAt DESC', (err, results) => {
     if (err) {
-      res.status(500).json({ error: 'Error fetching feedback' });
+      res.status(500).json({ error: 'Error fetching customer reviews' });
       return;
     }
     res.json(results);

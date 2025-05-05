@@ -11,9 +11,10 @@
         <nav>
             <div class="logo">RMS Admin</div>
             <div class="nav-links">
-                <button onclick="showSection('orders')">Orders</button>
-                <button onclick="showSection('bookings')">Table Bookings</button>
-                <button onclick="showSection('feedback')">Feedback</button>
+                <button onclick="showSection('orders')">Current Orders</button>
+                <button onclick="showSection('bookings')">Current Bookings</button>
+                <button onclick="showSection('reviews')">Customer Reviews</button>
+                <button onclick="showSection('inventory')">View Stock</button>
                 <button onclick="logout()">Logout</button>
             </div>
         </nav>
@@ -22,13 +23,14 @@
     <main>
         <!-- Orders Section -->
         <section id="orders" class="section">
-            <h2>Orders Management</h2>
+            <h2>Current Orders</h2>
             <div class="filter-bar">
                 <select id="orderStatusFilter" onchange="filterOrders()">
                     <option value="all">All Orders</option>
                     <option value="pending">Pending</option>
                     <option value="confirmed">Confirmed</option>
-                    <option value="completed">Completed</option>
+                    <option value="out_for_delivery">Out for Delivery</option>
+                    <option value="delivered">Delivered</option>
                     <option value="cancelled">Cancelled</option>
                 </select>
             </div>
@@ -37,7 +39,7 @@
 
         <!-- Bookings Section -->
         <section id="bookings" class="section" style="display: none;">
-            <h2>Table Bookings</h2>
+            <h2>Current Bookings</h2>
             <div class="filter-bar">
                 <select id="bookingStatusFilter" onchange="filterBookings()">
                     <option value="all">All Bookings</option>
@@ -51,11 +53,11 @@
             <div id="bookingsList" class="list-container"></div>
         </section>
         
-        <!-- Feedback Section -->
-        <section id="feedback" class="section" style="display: none;">
-            <h2>Customer Feedback</h2>
+        <!-- Customer Reviews Section -->
+        <section id="reviews" class="section" style="display: none;">
+            <h2>Customer Reviews</h2>
             <div class="filter-bar">
-                <select id="feedbackRatingFilter" onchange="filterFeedback()">
+                <select id="reviewRatingFilter" onchange="filterReviews()">
                     <option value="all">All Ratings</option>
                     <option value="5">5 Stars</option>
                     <option value="4">4 Stars</option>
@@ -64,7 +66,25 @@
                     <option value="1">1 Star</option>
                 </select>
             </div>
-            <div id="feedbackList" class="list-container"></div>
+            <div id="reviewsList" class="list-container"></div>
+        </section>
+
+        <!-- Inventory Management Section -->
+        <section id="inventory" class="section" style="display: none;">
+            <h2>Inventory Management</h2>
+            <div class="filter-bar">
+                <select id="inventoryCategoryFilter" onchange="filterInventory()">
+                    <option value="all">All Categories</option>
+                    <option value="Chef's Specials">Chef's Specials</option>
+                    <option value="Tacos">Tacos</option>
+                    <option value="Burgers">Burgers</option>
+                    <option value="Pizza">Pizza</option>
+                    <option value="Coffee">Coffee</option>
+                    <option value="Desserts">Desserts</option>
+                </select>
+                <button id="restockButton" class="restock-button" onclick="restockAllItems()">Restock All Items</button>
+            </div>
+            <div id="inventoryList" class="list-container"></div>
         </section>
     </main>
 

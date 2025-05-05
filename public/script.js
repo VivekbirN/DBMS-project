@@ -42,15 +42,18 @@ async function loadFeedback() {
 function updateAuthUI() {
     const loginBtn = document.getElementById('loginBtn');
     const registerBtn = document.getElementById('registerBtn');
+    const adminRegisterBtn = document.getElementById('adminRegisterBtn');
     const logoutBtn = document.getElementById('logoutBtn');
 
     if (token) {
         loginBtn.style.display = 'none';
         registerBtn.style.display = 'none';
+        adminRegisterBtn.style.display = 'none';
         logoutBtn.style.display = 'block';
     } else {
         loginBtn.style.display = 'block';
         registerBtn.style.display = 'block';
+        adminRegisterBtn.style.display = 'block';
         logoutBtn.style.display = 'none';
     }
 }
@@ -88,17 +91,54 @@ async function loadMenu() {
             return;
         }
         
-        menuContainer.innerHTML = filteredItems.map(item => `
-            <div class="menu-item" data-category="${item.category}">
+        menuContainer.innerHTML = filteredItems.map(item => {
+            const isOutOfStock = item.quantity <= 0;
+            return `
+            <div class="menu-item ${isOutOfStock ? 'out-of-stock' : ''}" data-category="${item.category}">
                 <div class="menu-item-image">
                     <img src="${item.image_url || 'https://via.placeholder.com/300x200'}" alt="${item.name}">
+                    ${isOutOfStock ? '<div class="out-of-stock-label">Out of Stock</div>' : ''}
                 </div>
                 <h3>${item.name}</h3>
                 <p class="description">${item.description}</p>
                 <p class="price">₹${parseFloat(item.price).toFixed(2)}</p>
-                <button onclick="addToCart({id: ${item.id}, name: '${item.name.replace(/'/g, "\\'").replace(/"/g, '\\"')}', price: ${parseFloat(item.price)}, description: '${item.description.replace(/'/g, "\\'").replace(/"/g, '\\"')}', image_url: '${item.image_url || ''}'})"><i class=\"fas fa-plus\"></i> Add to Cart</button>
+                <button 
+                    onclick="addToCart({id: ${item.id}, name: '${item.name.replace(/'/g, "\\'").replace(/"/g, '\\"')}', price: ${parseFloat(item.price)}, description: '${item.description.replace(/'/g, "\\'").replace(/"/g, '\\"')}', image_url: '${item.image_url || ''}', quantity: 1, outOfStock: ${isOutOfStock}})" 
+                    ${isOutOfStock ? 'disabled' : ''}
+                >
+                <i class=\"fas fa-plus\"></i> ${isOutOfStock ? 'Out of Stock' : 'Add to Cart'}</button>
             </div>
-        `).join('');
+        `}).join('');
+        
+        // Add styles for out-of-stock menu items if not already in CSS
+        if (!document.getElementById('out-of-stock-menu-styles')) {
+            const style = document.createElement('style');
+            style.id = 'out-of-stock-menu-styles';
+            style.textContent = `
+                .menu-item.out-of-stock {
+                    opacity: 0.8;
+                }
+                .menu-item.out-of-stock .menu-item-image {
+                    position: relative;
+                }
+                .out-of-stock-label {
+                    position: absolute;
+                    top: 50%;
+                    left: 50%;
+                    transform: translate(-50%, -50%);
+                    background-color: rgba(255, 0, 0, 0.7);
+                    color: white;
+                    padding: 5px 10px;
+                    border-radius: 4px;
+                    font-weight: bold;
+                }
+                .menu-item.out-of-stock button {
+                    background-color: #cccccc;
+                    cursor: not-allowed;
+                }
+            `;
+            document.head.appendChild(style);
+        }
     } catch (error) {
         console.error('Error loading menu:', error);
         document.getElementById('menuItems').innerHTML = `<p class="error-message">Failed to load menu items: ${error.message}</p>`;
@@ -135,17 +175,24 @@ async function loadFeaturedItems() {
             return;
         }
         
-        featuredContainer.innerHTML = featuredItems.map(item => `
-            <div class="menu-item" data-category="${item.category}">
+        featuredContainer.innerHTML = featuredItems.map(item => {
+            const isOutOfStock = item.quantity <= 0;
+            return `
+            <div class="menu-item ${isOutOfStock ? 'out-of-stock' : ''}" data-category="${item.category}">
                 <div class="menu-item-image">
                     <img src="${item.image_url || 'https://via.placeholder.com/300x200'}" alt="${item.name}">
+                    ${isOutOfStock ? '<div class="out-of-stock-label">Out of Stock</div>' : ''}
                 </div>
                 <h3>${item.name}</h3>
                 <p class="description">${item.description}</p>
                 <p class="price">₹${parseFloat(item.price).toFixed(2)}</p>
-                <button onclick="addToCart({id: ${item.id}, name: '${item.name.replace(/'/g, "\\'").replace(/"/g, '\\"')}', price: ${parseFloat(item.price)}, description: '${item.description.replace(/'/g, "\\'").replace(/"/g, '\\"')}', image_url: '${item.image_url || ''}'})"><i class=\"fas fa-plus\"></i> Add to Cart</button>
+                <button 
+                    onclick="addToCart({id: ${item.id}, name: '${item.name.replace(/'/g, "\\'").replace(/"/g, '\\"')}', price: ${parseFloat(item.price)}, description: '${item.description.replace(/'/g, "\\'").replace(/"/g, '\\"')}', image_url: '${item.image_url || ''}', quantity: 1, outOfStock: ${isOutOfStock}})" 
+                    ${isOutOfStock ? 'disabled' : ''}
+                >
+                <i class=\"fas fa-plus\"></i> ${isOutOfStock ? 'Out of Stock' : 'Add to Cart'}</button>
             </div>
-        `).join('');
+        `}).join('');
     } catch (error) {
         console.error('Error loading featured items:', error);
         document.getElementById('featuredItems').innerHTML = `<p class="error-message">Failed to load featured items: ${error.message}</p>`;
@@ -175,6 +222,12 @@ function filterMenu(category) {
 }
 
 function addToCart(item) {
+    // Check if item is out of stock
+    if (item.outOfStock) {
+        showToast(`${item.name} is out of stock and cannot be added to cart`, true);
+        return;
+    }
+    
     const existingItem = cart.find(cartItem => cartItem.id === item.id);
     if (existingItem) {
         existingItem.quantity = (existingItem.quantity || 1) + 1;
@@ -186,24 +239,32 @@ function addToCart(item) {
     showToast(`${item.name} added to cart`);
 }
 
+
+
 function updateCart() {
     const cartItems = document.getElementById('cartItems');
     const cartTotal = document.getElementById('cartTotal');
+    const checkoutBtn = document.querySelector('.checkout-btn');
     
     if (cart.length === 0) {
         cartItems.innerHTML = '<p class="empty-cart">Your cart is empty</p>';
         cartTotal.innerHTML = 'Total: ₹0.00';
+        if (checkoutBtn) checkoutBtn.disabled = true;
     } else {
+        // Check if any item is out of stock
+        const hasOutOfStockItems = cart.some(item => item.outOfStock);
+        
         cartItems.innerHTML = cart.map(item => `
-            <div class="cart-item">
+            <div class="cart-item ${item.outOfStock ? 'out-of-stock' : ''}">
                 <div class="cart-item-info">
                     <span class="cart-item-name">${item.name} x${item.quantity}</span>
                     <span class="cart-item-price">₹${(item.price * item.quantity).toFixed(2)}</span>
+                    ${item.outOfStock ? '<span class="stock-warning">Out of stock</span>' : ''}
                 </div>
                 <div class="cart-item-controls">
-                    <button class="quantity-btn" onclick="updateQuantity(${cart.indexOf(item)}, -1)">-</button>
+                    <button class="quantity-btn" onclick="updateQuantity(${cart.indexOf(item)}, -1)" ${item.outOfStock ? 'disabled' : ''}>-</button>
                     <span class="quantity">${item.quantity}</span>
-                    <button class="quantity-btn" onclick="updateQuantity(${cart.indexOf(item)}, 1)">+</button>
+                    <button class="quantity-btn" onclick="updateQuantity(${cart.indexOf(item)}, 1)" ${item.outOfStock ? 'disabled' : ''}>+</button>
                     <button class="remove-item" onclick="removeFromCart(${cart.indexOf(item)})"><i class="fas fa-trash"></i></button>
                 </div>
             </div>
@@ -211,6 +272,35 @@ function updateCart() {
         
         const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
         cartTotal.innerHTML = `Total: ₹${total.toFixed(2)}`;
+        
+        // Disable checkout button if any item is out of stock
+        if (checkoutBtn) {
+            checkoutBtn.disabled = hasOutOfStockItems;
+            if (hasOutOfStockItems) {
+                showToast('Please remove out-of-stock items before checkout');
+            }
+        }
+    }
+    
+    // Add styles for out-of-stock items if not already in CSS
+    if (!document.getElementById('out-of-stock-styles')) {
+        const style = document.createElement('style');
+        style.id = 'out-of-stock-styles';
+        style.textContent = `
+            .cart-item.out-of-stock {
+                opacity: 0.7;
+                background-color: #ffeeee;
+                border-left: 3px solid #ff5555;
+            }
+            .stock-warning {
+                color: #ff5555;
+                font-size: 0.8rem;
+                font-weight: bold;
+                display: block;
+                margin-top: 5px;
+            }
+        `;
+        document.head.appendChild(style);
     }
 }
 
@@ -226,7 +316,7 @@ function removeFromCart(index) {
     showToast('Item removed from cart');
 }
 
-function showToast(message) {
+function showToast(message, isError = false) {
     // Create toast element if it doesn't exist
     let toast = document.getElementById('toast');
     if (!toast) {
@@ -237,7 +327,19 @@ function showToast(message) {
     
     // Set message and show toast
     toast.textContent = message;
-    toast.className = 'show';
+    toast.className = isError ? 'show error' : 'show';
+    
+    // Add error style if not already in CSS
+    if (isError && !document.getElementById('toast-error-style')) {
+        const style = document.createElement('style');
+        style.id = 'toast-error-style';
+        style.textContent = `
+            #toast.error {
+                background-color: #ff5555;
+            }
+        `;
+        document.head.appendChild(style);
+    }
     
     // Hide toast after 3 seconds
     setTimeout(() => {
@@ -248,6 +350,14 @@ function showToast(message) {
 function placeOrder() {
     if (cart.length === 0) {
         alert('Your cart is empty');
+        return;
+    }
+    
+    // Check if any item is out of stock
+    const outOfStockItems = cart.filter(item => item.outOfStock);
+    if (outOfStockItems.length > 0) {
+        const itemNames = outOfStockItems.map(item => item.name).join(', ');
+        alert(`Cannot proceed with checkout. The following items are out of stock: ${itemNames}. Please remove them from your cart.`);
         return;
     }
 
@@ -477,8 +587,22 @@ async function submitOrder(event) {
         return;
     }
     
+    // Check if any items are marked as out of stock
+    const outOfStockItems = cart.filter(item => item.outOfStock);
+    if (outOfStockItems.length > 0) {
+        const itemNames = outOfStockItems.map(item => item.name).join(', ');
+        alert(`Cannot proceed with checkout. The following items are out of stock: ${itemNames}. Please remove them from your cart.`);
+        return;
+    }
+    
     // Calculate total amount
     const totalAmount = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+
+    // Show loading indicator
+    const submitButton = document.querySelector('#checkoutForm button[type="submit"]');
+    const originalButtonText = submitButton.innerHTML;
+    submitButton.innerHTML = 'Processing...';
+    submitButton.disabled = true;
 
     try {
         const response = await fetch('/api/orders', {
@@ -490,17 +614,16 @@ async function submitOrder(event) {
             body: JSON.stringify({
                 items: cart,
                 totalAmount: totalAmount,
-                customerInfo: {
-                    name: customerName,
-                    phone: customerPhone,
-                    email: customerEmail,
-                    address: customerAddress,
-                    paymentMethod: paymentMethodElement.value
-                }
+                delivery_address: customerAddress,
+                contact_phone: customerPhone,
+                customer_email: customerEmail,
+                customer_name: customerName
             })
         });
 
-        const data = await response.json();
+        // Reset button state
+        submitButton.innerHTML = originalButtonText;
+        submitButton.disabled = false;
 
         if (response.ok) {
             closeCheckoutModal();
@@ -513,11 +636,43 @@ async function submitOrder(event) {
             document.getElementById('customerEmail').value = '';
             document.getElementById('customerAddress').value = '';
         } else {
-            throw new Error(data.error || 'Failed to place order');
+            const data = await response.json();
+            
+            if (data.outOfStockItems && data.outOfStockItems.length > 0) {
+                // Mark items as out of stock
+                data.outOfStockItems.forEach(itemName => {
+                    const outOfStockItem = cart.find(item => item.name === itemName);
+                    if (outOfStockItem) {
+                        outOfStockItem.outOfStock = true;
+                    }
+                });
+                
+                updateCart();
+                
+                // Show error message and keep modal open
+                alert(`The following items are out of stock: ${data.outOfStockItems.join(', ')}. Please remove them from your cart before placing the order.`);
+            } else if (data.itemName) {
+                // Legacy support for single item out of stock
+                const outOfStockItem = cart.find(item => item.name === data.itemName);
+                if (outOfStockItem) {
+                    outOfStockItem.outOfStock = true;
+                    updateCart();
+                    
+                    // Show error message and keep modal open
+                    alert(`${data.itemName} is out of stock. Please remove it from your cart before placing the order.`);
+                }
+            } else {
+                closeCheckoutModal();
+                alert(data.error || 'Failed to place order');
+            }
         }
     } catch (error) {
         console.error('Error placing order:', error);
         alert(error.message || 'Failed to place order. Please try again.');
+        
+        // Reset button state in case of error
+        submitButton.innerHTML = originalButtonText;
+        submitButton.disabled = false;
     }
 }
 
@@ -661,6 +816,47 @@ async function register(event) {
     } finally {
         submitButton.disabled = false;
         submitButton.innerHTML = 'Register';
+    }
+}
+
+// Function to register an admin
+async function registerAdmin(event) {
+    event.preventDefault();
+    const username = document.getElementById('adminUsername').value;
+    const email = document.getElementById('adminEmail').value;
+    const password = document.getElementById('adminPassword').value;
+    const phone = document.getElementById('adminPhone').value;
+    const submitButton = document.querySelector('#adminRegisterForm button[type="submit"]');
+    submitButton.disabled = true;
+    submitButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Registering...';
+    
+    try {
+        const response = await fetch('/api/admin/register', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ username, email, password, phone })
+        });
+        
+        let data;
+        try {
+            data = await response.json();
+        } catch (jsonError) {
+            throw new Error('Admin registration failed: Server returned invalid response.');
+        }
+        
+        if (response.ok) {
+            alert(data.message || 'Admin registered successfully!');
+            document.getElementById('adminRegisterForm').reset();
+            showSection('login');
+        } else {
+            alert(data.error || 'Admin registration failed.');
+        }
+    } catch (error) {
+        alert(error.message || 'Admin registration failed: Network or server error.');
+        console.error('Error registering admin:', error);
+    } finally {
+        submitButton.disabled = false;
+        submitButton.innerHTML = 'Register as Admin';
     }
 }
 

@@ -129,6 +129,69 @@ select, input[type="date"] {
     color: white;
 }
 
+/* Inventory Management Styles */
+.stock-badge {
+    display: inline-block;
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    font-size: 0.875rem;
+    font-weight: bold;
+    text-align: center;
+}
+
+.in-stock {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.low-stock {
+    background-color: #FFC107;
+    color: #121212;
+}
+
+.out-of-stock {
+    background-color: #ff6b6b;
+    color: white;
+}
+
+.quantity-control {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-right: 1rem;
+}
+
+.quantity-btn {
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    font-size: 1.2rem;
+    background-color: #333;
+    color: #e0e0e0;
+}
+
+.restock-button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s;
+}
+
+.restock-button:hover {
+    background-color: #45a049;
+}
+
+.restock-item-btn {
+    background-color: #4CAF50;
+    color: white;
+}
+
 button {
     padding: 0.5rem 1rem;
     border: none;

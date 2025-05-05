@@ -26,7 +26,9 @@
                 <button onclick="showSection('contact')"><i class="fas fa-envelope"></i> Contact</button>
                 <button onclick="showSection('help')"><i class="fas fa-question-circle"></i> Help</button>
                 <button id="loginBtn" onclick="showSection('login')"><i class="fas fa-sign-in-alt"></i> Login</button>
-                <button id="registerBtn" onclick="showSection('register')"><i class="fas fa-user-plus"></i> Register</button>
+                <button id="registerBtn" onclick="showSection('register')"><i class="fas fa-user-plus"></i> Register(User)</button>
+                <button id="adminRegisterBtn" onclick="showSection('admin-register')"><i class="fas fa-user-shield"></i> Register(admin)</button>
+                <button id="adminLoginBtn" onclick="window.location.href='admin-login.html'"><i class="fas fa-user-lock"></i> Admin Login</button>
                 <button id="logoutBtn" style="display: none;" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</button>
             </div>
         </nav>
@@ -266,6 +268,18 @@
                 <input type="number" id="guests" placeholder="Number of guests" required min="1" max="10">
                 <textarea id="bookingSpecialRequests" placeholder="Special Requests (Optional)"></textarea>
                 <button type="submit">Book Now</button>
+            </form>
+        </section>
+
+        <!-- Admin Register Section -->
+        <section id="admin-register" class="section" style="display: none;">
+            <h2>Admin Registration</h2>
+            <form id="adminRegisterForm" onsubmit="registerAdmin(event)">
+                <input type="text" id="adminUsername" placeholder="Admin Username" required>
+                <input type="email" id="adminEmail" placeholder="Admin Email" required>
+                <input type="password" id="adminPassword" placeholder="Admin Password" required>
+                <input type="tel" id="adminPhone" placeholder="Phone Number" required>
+                <button type="submit">Register as Admin</button>
             </form>
         </section>
 

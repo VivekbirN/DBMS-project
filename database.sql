@@ -24,7 +24,7 @@ CREATE TABLE IF NOT EXISTS orders (
   user_id INT,
   items JSON NOT NULL,
   total_amount DECIMAL(10, 2) NOT NULL,
-  status ENUM('pending', 'confirmed', 'completed', 'cancelled') DEFAULT 'pending',
+  status ENUM('pending', 'confirmed', 'out_for_delivery', 'delivered', 'cancelled') DEFAULT 'pending',
   order_notes TEXT,
   delivery_address TEXT,
   contact_phone VARCHAR(20),
@@ -42,9 +42,18 @@ CREATE TABLE IF NOT EXISTS bookings (
   time TIME NOT NULL,
   guests INT NOT NULL,
   special_requests TEXT,
-  status ENUM('pending', 'confirmed', 'completed', 'cancelled') DEFAULT 'pending',
+  status ENUM('pending', 'confirmed', 'out_for_delivery', 'delivered', 'cancelled') DEFAULT 'pending',
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   FOREIGN KEY (user_id) REFERENCES users(id)
+);
+
+CREATE TABLE IF NOT EXISTS admin (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  username VARCHAR(50) NOT NULL UNIQUE,
+  password VARCHAR(255) NOT NULL,
+  email VARCHAR(100) NOT NULL UNIQUE,
+  phone VARCHAR(20),
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE IF NOT EXISTS CustomerReviews (
@@ -54,6 +63,13 @@ CREATE TABLE IF NOT EXISTS CustomerReviews (
   Rating INT NOT NULL CHECK (Rating BETWEEN 1 AND 5),
   Message TEXT NOT NULL,
   SubmittedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS menu_quantity (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  menu_item_id INT NOT NULL,
+  quantity INT NOT NULL DEFAULT 20,
+  FOREIGN KEY (menu_item_id) REFERENCES menu_items(id)
 );
 
 -- Insert sample menu items
